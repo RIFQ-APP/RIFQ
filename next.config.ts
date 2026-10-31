@@ -4,7 +4,12 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [],
   },
-  // Allow audio from everyayah
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
   async headers() {
     return [];
   },

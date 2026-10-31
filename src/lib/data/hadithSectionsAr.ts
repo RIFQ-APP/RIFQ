@@ -134,7 +134,6 @@ export const SECTION_AR: Record<string, string> = {
   Supplication: "الدعاء",
   Etiquette: "الأدب",
   "Chapters on Etiquette": "الأدب",
-  Medicine: "الطب",
 };
 
 export function sectionNameAr(english: string): string {
