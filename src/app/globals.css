@@ -1,0 +1,202 @@
+@import "tailwindcss";
+
+:root {
+  --background: #faf8f5;
+  --foreground: #1a2e1a;
+  --card: #ffffff;
+  --card-foreground: #1a2e1a;
+  --primary: #1e4d2b;
+  --primary-foreground: #faf8f5;
+  --secondary: #e8f0e9;
+  --secondary-foreground: #1e4d2b;
+  --muted: #f0ebe3;
+  --muted-foreground: #5c6b5c;
+  --accent: #c9a227;
+  --accent-foreground: #1a2e1a;
+  --border: #d4cfc4;
+  --input: #e8e4db;
+  --ring: #1e4d2b;
+  --success: #2d6a3e;
+  --warning: #b8860b;
+  --destructive: #9b2c2c;
+  --radius: 0.75rem;
+  --quran-bg: #fdfbf7;
+  --quran-text: #1a1a1a;
+}
+
+.dark {
+  --background: #0f1a12;
+  --foreground: #e8f0e9;
+  --card: #15201a;
+  --card-foreground: #e8f0e9;
+  --primary: #4a9b5f;
+  --primary-foreground: #0f1a12;
+  --secondary: #1e2e22;
+  --secondary-foreground: #a8d4b2;
+  --muted: #1a2620;
+  --muted-foreground: #8fa893;
+  --accent: #d4af37;
+  --accent-foreground: #0f1a12;
+  --border: #2a3a30;
+  --input: #1e2e22;
+  --ring: #4a9b5f;
+  --success: #4a9b5f;
+  --warning: #d4af37;
+  --destructive: #e05a5a;
+  --quran-bg: #121c16;
+  --quran-text: #e8e8e0;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-destructive: var(--destructive);
+  --color-quran-bg: var(--quran-bg);
+  --color-quran-text: var(--quran-text);
+  --font-sans: var(--font-cairo);
+  --font-quran: var(--font-amiri);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  border-color: var(--border);
+}
+
+html {
+  direction: rtl;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-cairo), "Segoe UI", Tahoma, Arial, sans-serif;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* خط قرآني */
+.font-quran {
+  font-family: var(--font-amiri), "Amiri", "Traditional Arabic", serif;
+  line-height: 2;
+}
+
+/* بطاقة */
+.card {
+  background: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(30, 77, 43, 0.06);
+}
+
+/* أزرار */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-radius: var(--radius);
+  padding: 0.625rem 1.25rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+  border-radius: var(--radius);
+  padding: 0.625rem 1.25rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: color-mix(in srgb, var(--secondary) 80%, var(--primary));
+}
+
+/* تنقل */
+.nav-link {
+  color: var(--muted-foreground);
+  transition: color 0.2s, background 0.2s;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--primary);
+  background: var(--secondary);
+}
+
+.ayah-active {
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+  border-right: 3px solid var(--primary);
+}
+
+.transition-soft {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--muted);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}

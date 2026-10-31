@@ -1,0 +1,27 @@
+import { NextRequest, NextResponse } from "next/server";
+import { loginUser, createSession, setSessionCookie } from "@/lib/auth";
+import { z } from "zod";
+
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string().min(1),
+});
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const parsed = schema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json({ error: "بيانات غير صالحة" }, { status: 400 });
+    }
+
+    const user = await loginUser(parsed.data.email, parsed.data.password);
+    const token = await createSession(user);
+    await setSessionCookie(token);
+
+    return NextResponse.json({ user });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "حدث خطأ";
+    return NextResponse.json({ error: message }, { status: 401 });
+  }
+}
