@@ -101,14 +101,14 @@ export default function DashboardPage() {
       <main className="flex-1 mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <PageHeader
-          icon={<IconUser size={22} />}
-          kicker="حسابك"
-          title="
-              مرحباً{user?.name ? `، ${user.name}` : ""}
-            "
-        />
-            <p className="text-sm text-muted-foreground">{user?.email}</p>
+            <div className="mb-2">
+              <PageHeader
+                icon={<IconUser size={22} />}
+                kicker="حسابك"
+                title={user?.name ? `مرحباً، ${user.name}` : "مرحباً"}
+              />
+              <p className="text-sm text-muted-foreground -mt-4">{user?.email}</p>
+            </div>
           </div>
           <button
             type="button"

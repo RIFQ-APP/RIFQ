@@ -20,9 +20,7 @@ export default function SupportPage() {
           <PageHeader
           icon={<IconHeart size={22} />}
           kicker="المساهمة"
-          title="
-            ادعم رِفْق
-          "
+          title="ادعم رِفْق"
         />
           <p className="text-muted-foreground leading-relaxed mb-10 max-w-xl mx-auto">
             رِفْق منصة تعليمية مجانية تهدف لتيسير قراءة القرآن وحفظه وفهمه.
