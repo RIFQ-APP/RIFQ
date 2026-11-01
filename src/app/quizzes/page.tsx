@@ -5,8 +5,11 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import {
   QUIZ_CATEGORIES,
+  QUIZ_PACKS,
   QUIZ_QUESTIONS,
-  getQuestionsByCategory,
+  getQuestionsByQuiz,
+  getPacksByCategory,
+  getQuizPack,
   type QuizQuestion,
 } from "@/lib/data/quizzes";
 import {
@@ -19,9 +22,11 @@ import {
   IconLayers,
   IconAward,
   IconPlay,
+  IconChevronLeft,
+  IconSparkles,
 } from "@/components/icons";
 
-type Phase = "select" | "quiz" | "result";
+type Phase = "categories" | "packs" | "quiz" | "result";
 
 const LEVEL_STYLE: Record<string, string> = {
   سهل: "bg-emerald-500/15 text-emerald-800 dark:text-emerald-300",
@@ -36,30 +41,45 @@ const CAT_ICONS: Record<string, typeof IconBook> = {
   quran: IconBook,
   fiqh: IconScale,
   hadith: IconScroll,
+  aqidah: IconSparkles,
 };
 
 export default function QuizzesPage() {
-  const [phase, setPhase] = useState<Phase>("select");
+  const [phase, setPhase] = useState<Phase>("categories");
   const [category, setCategory] = useState<string>("tajweed");
+  const [quizId, setQuizId] = useState<string>("");
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const [answered, setAnswered] = useState(0);
 
-  const questions = useMemo(() => getQuestionsByCategory(category), [category]);
+  const questions = useMemo(
+    () => (quizId ? getQuestionsByQuiz(quizId) : []),
+    [quizId],
+  );
   const q: QuizQuestion | undefined = questions[index];
   const catMeta = QUIZ_CATEGORIES.find((c) => c.id === category);
+  const packMeta = quizId ? getQuizPack(quizId) : undefined;
+  const packs = useMemo(() => getPacksByCategory(category), [category]);
 
-  const counts = useMemo(() => {
-    const map: Record<string, number> = { all: QUIZ_QUESTIONS.length };
+  const catCounts = useMemo(() => {
+    const map: Record<string, { questions: number; packs: number }> = {};
     for (const c of QUIZ_CATEGORIES) {
-      map[c.id] = QUIZ_QUESTIONS.filter((x) => x.category === c.id).length;
+      map[c.id] = {
+        questions: QUIZ_QUESTIONS.filter((x) => x.category === c.id).length,
+        packs: QUIZ_PACKS.filter((x) => x.category === c.id).length,
+      };
     }
     return map;
   }, []);
 
-  const start = (cat: string) => {
+  const openCategory = (cat: string) => {
     setCategory(cat);
+    setPhase("packs");
+  };
+
+  const startQuiz = (id: string) => {
+    setQuizId(id);
     setIndex(0);
     setSelected(null);
     setScore(0);
@@ -90,7 +110,7 @@ export default function QuizzesPage() {
     <>
       <Header />
       <main className="flex-1 mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-        {phase === "select" && (
+        {phase === "categories" && (
           <>
             <div className="mb-10 text-center sm:text-start">
               <div className="inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-primary mb-3">
@@ -98,35 +118,30 @@ export default function QuizzesPage() {
                 اختبارات رِفْق
               </div>
               <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-3">
-                اختر الاختبار قبل البدء
+                اختر مجال الاختبار
               </h1>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-base leading-relaxed">
-                حدّد المجال الذي تريد مراجعته. كل اختبار مستقل، والنتيجة تعليمية فقط — ليست حكماً على التديّن.
+                كل قسم يحتوي على عدة اختبارات مستقلة من مصادر تعليمية معروفة.
+                النتيجة تعليمية وليست حكماً شرعياً.
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">
+                {QUIZ_PACKS.length} اختباراً · {QUIZ_QUESTIONS.length} سؤالاً
               </p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {QUIZ_CATEGORIES.map((c) => {
-                const n = counts[c.id] || 0;
                 const Icon = CAT_ICONS[c.id] || IconLayers;
-                const active = category === c.id;
+                const st = catCounts[c.id];
                 return (
                   <button
                     key={c.id}
                     type="button"
-                    onClick={() => setCategory(c.id)}
-                    className={`group text-start rounded-2xl border p-5 transition-soft bg-card shadow-sm hover:shadow-md ${
-                      active
-                        ? "border-primary ring-2 ring-primary/20"
-                        : "border-border hover:border-primary/40"
-                    }`}
+                    onClick={() => openCategory(c.id)}
+                    className="group text-start rounded-2xl border border-border bg-card p-5 shadow-sm hover:shadow-md hover:border-primary/40 transition-soft"
                   >
                     <div className="flex items-start justify-between gap-2 mb-4">
-                      <span
-                        className={`inline-flex h-11 w-11 items-center justify-center rounded-xl ${
-                          active ? "bg-primary text-primary-foreground" : "bg-secondary text-primary"
-                        }`}
-                      >
+                      <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-secondary text-primary">
                         <Icon size={22} />
                       </span>
                       <span
@@ -137,53 +152,81 @@ export default function QuizzesPage() {
                         {c.level}
                       </span>
                     </div>
-                    <span className="block text-lg font-bold text-foreground group-hover:text-primary transition-soft mb-1">
+                    <span className="block text-lg font-bold mb-1 group-hover:text-primary transition-soft">
                       {c.name}
                     </span>
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-4 min-h-[2.5rem]">
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
                       {c.desc}
                     </p>
                     <div className="flex items-center justify-between text-xs text-muted-foreground">
-                      <span>{n} سؤال</span>
-                      {active && <span className="text-primary font-semibold">مُختار</span>}
+                      <span>{st?.packs || 0} اختبارات</span>
+                      <span>{st?.questions || 0} سؤالاً</span>
                     </div>
                   </button>
                 );
               })}
             </div>
+          </>
+        )}
 
-            <div className="mt-8 rounded-2xl border border-border bg-secondary/40 p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
-              <div className="flex items-center gap-3">
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-                  <CatIcon size={22} />
-                </span>
-                <div>
-                  <p className="font-semibold text-foreground">{catMeta?.name || "اختر مجالاً"}</p>
-                  <p className="text-sm text-muted-foreground mt-0.5">
-                    {counts[category] || 0} سؤال · المستوى: {catMeta?.level || "—"}
-                  </p>
-                </div>
+        {phase === "packs" && (
+          <>
+            <button
+              type="button"
+              onClick={() => setPhase("categories")}
+              className="inline-flex items-center gap-1 text-sm text-primary mb-6 hover:underline"
+            >
+              <IconChevronLeft size={16} />
+              كل المجالات
+            </button>
+            <div className="mb-8 flex items-center gap-3">
+              <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-secondary text-primary">
+                <CatIcon size={22} />
+              </span>
+              <div>
+                <h1 className="text-2xl font-bold">{catMeta?.name}</h1>
+                <p className="text-sm text-muted-foreground">
+                  اختر اختباراً واحداً للبدء · {packs.length} متاح
+                </p>
               </div>
-              <button
-                type="button"
-                onClick={() => start(category)}
-                disabled={!counts[category]}
-                className="inline-flex h-12 items-center justify-center gap-2 px-8 rounded-xl bg-primary text-primary-foreground text-sm font-semibold shadow-sm hover:opacity-95 disabled:opacity-50 transition-soft"
-              >
-                <IconPlay size={18} />
-                ابدأ الاختبار
-              </button>
             </div>
 
-            <div className="mt-6 flex flex-wrap gap-3">
-              <button
-                type="button"
-                onClick={() => start("all")}
-                className="inline-flex h-11 items-center gap-2 px-5 rounded-xl border border-border bg-card text-sm font-medium hover:border-primary/40 transition-soft"
-              >
-                <IconLayers size={18} className="text-primary" />
-                اختبار شامل ({counts.all} سؤالاً)
-              </button>
+            <div className="space-y-3">
+              {packs.map((pack) => {
+                const n = getQuestionsByQuiz(pack.id).length;
+                return (
+                  <div
+                    key={pack.id}
+                    className="rounded-2xl border border-border bg-card p-5 flex flex-col sm:flex-row sm:items-center gap-4 justify-between"
+                  >
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2 mb-1">
+                        <h2 className="font-bold text-foreground">{pack.title}</h2>
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${
+                            LEVEL_STYLE[pack.level]
+                          }`}
+                        >
+                          {pack.level}
+                        </span>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-1">{pack.desc}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {n} أسئلة · المصدر: {pack.source}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => startQuiz(pack.id)}
+                      disabled={n === 0}
+                      className="inline-flex h-11 shrink-0 items-center justify-center gap-2 px-5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold disabled:opacity-50"
+                    >
+                      <IconPlay size={16} />
+                      ابدأ
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           </>
         )}
@@ -196,7 +239,9 @@ export default function QuizzesPage() {
                   <CatIcon size={20} />
                 </span>
                 <div>
-                  <p className="text-sm text-primary font-semibold">{catMeta?.name || "اختبار شامل"}</p>
+                  <p className="text-sm text-primary font-semibold">
+                    {packMeta?.title || catMeta?.name}
+                  </p>
                   <h1 className="text-xl sm:text-2xl font-bold">
                     سؤال {index + 1} من {questions.length}
                   </h1>
@@ -204,10 +249,10 @@ export default function QuizzesPage() {
               </div>
               <button
                 type="button"
-                onClick={() => setPhase("select")}
-                className="text-sm text-muted-foreground hover:text-primary transition-soft"
+                onClick={() => setPhase("packs")}
+                className="text-sm text-muted-foreground hover:text-primary"
               >
-                تغيير الاختبار
+                اختبارات أخرى
               </button>
             </div>
 
@@ -222,8 +267,8 @@ export default function QuizzesPage() {
 
             <div className="rounded-2xl border border-border bg-card p-5 sm:p-8 shadow-sm">
               <div className="flex justify-between text-xs text-muted-foreground mb-5">
-                <span>التقدّم</span>
-                <span className="font-medium text-foreground">النتيجة الحالية: {score}</span>
+                <span>{packMeta?.source}</span>
+                <span className="font-medium text-foreground">النتيجة: {score}</span>
               </div>
               <h2 className="text-lg sm:text-xl font-semibold mb-6 leading-relaxed">{q.question}</h2>
               <div className="space-y-2.5">
@@ -232,9 +277,8 @@ export default function QuizzesPage() {
                     "w-full text-right px-4 py-3.5 rounded-xl border text-sm sm:text-base transition-soft ";
                   if (selected !== null) {
                     if (i === q.correctIndex)
-                      cls += "bg-emerald-500/10 border-emerald-500/50 text-foreground";
-                    else if (i === selected)
-                      cls += "bg-rose-500/10 border-rose-500/50 text-foreground";
+                      cls += "bg-emerald-500/10 border-emerald-500/50";
+                    else if (i === selected) cls += "bg-rose-500/10 border-rose-500/50";
                     else cls += "opacity-50 border-border";
                   } else {
                     cls += "border-border hover:border-primary/50 hover:bg-secondary/40 cursor-pointer";
@@ -260,7 +304,7 @@ export default function QuizzesPage() {
 
               {selected !== null && (
                 <div className="mt-6 rounded-xl bg-secondary/50 p-4 sm:p-5">
-                  <p className="text-sm leading-relaxed mb-1">
+                  <p className="text-sm font-medium mb-1">
                     {selected === q.correctIndex ? "إجابة صحيحة." : "إجابة غير صحيحة."}
                   </p>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-2">{q.explanation}</p>
@@ -283,26 +327,35 @@ export default function QuizzesPage() {
                 <IconAward size={28} />
               </span>
               <p className="text-sm font-semibold text-primary mb-2">انتهى الاختبار</p>
-              <p className="text-5xl font-bold text-foreground mb-2">
+              <p className="text-5xl font-bold mb-2">
                 {score}
                 <span className="text-2xl text-muted-foreground"> / {answered}</span>
               </p>
               <p className="text-muted-foreground mb-1">{percent}% إجابات صحيحة</p>
-              <p className="text-sm text-muted-foreground mb-8">{catMeta?.name || "اختبار شامل"}</p>
+              <p className="text-sm text-muted-foreground mb-8">
+                {packMeta?.title} · {packMeta?.source}
+              </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <button
                   type="button"
-                  onClick={() => start(category)}
+                  onClick={() => startQuiz(quizId)}
                   className="h-12 px-6 rounded-xl bg-primary text-primary-foreground text-sm font-semibold"
                 >
-                  إعادة نفس الاختبار
+                  إعادة الاختبار
                 </button>
                 <button
                   type="button"
-                  onClick={() => setPhase("select")}
-                  className="h-12 px-6 rounded-xl border border-border bg-card text-sm font-medium"
+                  onClick={() => setPhase("packs")}
+                  className="h-12 px-6 rounded-xl border border-border text-sm font-medium"
                 >
-                  اختيار اختبار آخر
+                  اختبارات القسم
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPhase("categories")}
+                  className="h-12 px-6 rounded-xl border border-border text-sm font-medium"
+                >
+                  كل المجالات
                 </button>
               </div>
             </div>

@@ -1,70 +1,59 @@
-import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import {
-  IconBook,
-  IconBookOpen,
-  IconMic,
-  IconHands,
-  IconBrain,
-  IconMap,
-  IconScroll,
-  IconScale,
-  IconAward,
-  IconCalendar,
-  IconSparkles,
-  IconSearch,
-} from "@/components/icons";
+import { SEERAH_TIMELINE } from "@/lib/data/seerah";
+import { IconMap } from "@/components/icons";
+import PageHeader from "@/components/PageHeader";
 
 export const metadata = {
-  title: "المكتبة الإسلامية",
-  description: "تفسير، حديث، سيرة، فقه، تجويد",
+  title: "السيرة النبوية",
+  description: "خط زمني لأهم أحداث السيرة",
 };
 
-const sections = [
-  { title: "موسوعة التفسير", desc: "معاني الآيات من مصادر موثوقة باختيار السورة.", Icon: IconSparkles, href: "/tafsir" },
-  { title: "المصحف والتلاوة", desc: "قراءة واستماع وتفسير ميسر لكل آية.", Icon: IconBook, href: "/quran" },
-  { title: "أكاديمية التجويد", desc: "دروس متدرجة مع أمثلة ومراجع.", Icon: IconMic, href: "/tajweed" },
-  { title: "الأذكار والأدعية", desc: "صباح ومساء وبعد الصلاة مع العداد.", Icon: IconHands, href: "/adhkar" },
-  { title: "أكاديمية الحفظ", desc: "تتبع الحفظ وجلسات تفاعلية.", Icon: IconBrain, href: "/hifz" },
-  { title: "السيرة النبوية", desc: "خط زمني من المولد إلى الوفاة.", Icon: IconMap, href: "/library/seerah" },
-  { title: "مكتبة الحديث", desc: "أحاديث مختارة مع التخريج والدرجة.", Icon: IconScroll, href: "/library/hadith" },
-  { title: "الفقه والعبادات", desc: "طهارة، صلاة، صيام، زكاة، حج.", Icon: IconScale, href: "/library/fiqh" },
-  { title: "الاختبارات", desc: "راجع التجويد والسيرة والأذكار.", Icon: IconAward, href: "/quizzes" },
-  { title: "خطة التعلم", desc: "تتبع يومي مرن للقراءة والحفظ.", Icon: IconCalendar, href: "/plan" },
-  { title: "التدبّر", desc: "متشابهات ومقارنات هادئة بين الآيات.", Icon: IconBookOpen, href: "/tadabbur" },
-  { title: "البحث", desc: "ابحث في القرآن والمحتوى بسرعة.", Icon: IconSearch, href: "/search" },
-] as const;
-
-export default function LibraryPage() {
+export default function SeerahPage() {
   return (
     <>
       <Header />
-      <main className="flex-1 mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <p className="text-sm font-semibold text-primary mb-2">المكتبة</p>
-          <h1 className="text-3xl font-bold text-foreground mb-2">المكتبة الإسلامية</h1>
-          <p className="text-muted-foreground max-w-2xl">
-            محتوى منظم وموثق. المصادر ظاهرة، والفتوى الشخصية لأهل العلم.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {sections.map((s) => (
-            <Link
-              key={s.href}
-              href={s.href}
-              className="card p-6 transition-soft hover:border-primary/40 group"
-            >
-              <span className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-secondary text-primary">
-                <s.Icon size={22} />
-              </span>
-              <h2 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-soft">
-                {s.title}
-              </h2>
-              <p className="text-sm text-muted-foreground mb-3">{s.desc}</p>
-              <span className="text-xs text-primary font-medium">متاح</span>
-            </Link>
+      <main className="flex-1 mx-auto max-w-3xl px-4 py-8 sm:px-6">
+        <PageHeader
+          icon={<IconMap size={22} />}
+          kicker="السيرة"
+          title="السيرة النبوية"
+        />
+        <p className="text-muted-foreground mb-8">
+          خط زمني موجز لأهم الأحداث. مع ذكر المصادر، والتمييز بين الثابت والمشهور.
+        </p>
+
+        <div className="relative border-r-2 border-primary/30 pr-6 space-y-8">
+          {SEERAH_TIMELINE.map((event) => (
+            <div key={event.id} className="relative">
+              <div className="absolute -right-[1.4rem] top-1 h-3 w-3 rounded-full bg-primary border-2 border-background" />
+              <div className="card p-5">
+                <div className="flex flex-wrap items-center gap-2 mb-2">
+                  <span className="text-xs font-medium text-primary">{event.year}</span>
+                  <span
+                    className={`text-[10px] px-2 py-0.5 rounded-full ${
+                      event.period === "makki"
+                        ? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200"
+                        : "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200"
+                    }`}
+                  >
+                    {event.period === "makki" ? "مكّي" : "مدني"}
+                  </span>
+                </div>
+                <h2 className="font-semibold text-foreground mb-2">{event.title}</h2>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+                  {event.summary}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  المصادر: {event.sources.join(" · ")}
+                </p>
+              </div>
+            </div>
           ))}
+        </div>
+
+        <div className="mt-10 p-4 rounded-lg bg-muted/50 text-sm text-muted-foreground">
+          هذا ملخص تعليمي. للتفاصيل يُرجع إلى كتب السيرة المعتمدة مع مراعاة منهج المحدثين في الرواية.
         </div>
       </main>
       <Footer />
