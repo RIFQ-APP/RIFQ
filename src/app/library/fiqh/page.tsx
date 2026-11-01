@@ -5,6 +5,8 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { FIQH_TOPICS, FIQH_CATEGORIES } from "@/lib/data/fiqh";
+import { IconScale } from "@/components/icons";
+import PageHeader from "@/components/PageHeader";
 
 export default function FiqhPage() {
   const [cat, setCat] = useState("all");
@@ -19,7 +21,11 @@ export default function FiqhPage() {
     <>
       <Header />
       <main className="flex-1 mx-auto max-w-3xl px-4 py-8 sm:px-6">
-        <h1 className="text-3xl font-bold mb-2">الفقه والعبادات</h1>
+        <PageHeader
+          icon={<IconScale size={22} />}
+          kicker="الفقه"
+          title="الفقه والعبادات"
+        />
         <p className="text-muted-foreground text-sm mb-6">
           ملخصات تعليمية منظمة. ليست بديلاً عن سؤال أهل العلم في النوازل والفتوى الشخصية.
         </p>

@@ -10,6 +10,8 @@ import {
   searchHadiths,
 } from "@/lib/data/hadith";
 import { sectionNameAr } from "@/lib/data/hadithSectionsAr";
+import { IconScroll } from "@/components/icons";
+import PageHeader from "@/components/PageHeader";
 
 /** كتب كاملة من مصدر مفتوح (fawazahmed0/hadith-api) — آلاف الأحاديث */
 const FULL_BOOKS = [
@@ -171,7 +173,11 @@ export default function HadithPage() {
     <>
       <Header />
       <main className="flex-1 mx-auto max-w-3xl px-4 py-8 sm:px-6">
-        <h1 className="text-3xl font-bold mb-2">مكتبة الحديث</h1>
+        <PageHeader
+          icon={<IconScroll size={22} />}
+          kicker="الحديث"
+          title="مكتبة الحديث"
+        />
         <p className="text-muted-foreground text-sm mb-6">
           آلاف الأحاديث من كتب السنة، مع تقسيم بالأبواب وبحث. المختارات المحلية للتعلّم السريع.
         </p>

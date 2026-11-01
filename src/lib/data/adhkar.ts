@@ -8,14 +8,14 @@ export interface AdhkarItem {
 }
 
 export const ADHKAR_CATEGORIES = [
-  { id: "morning", name: "أذكار الصباح", icon: "🌅" },
-  { id: "evening", name: "أذكار المساء", icon: "🌙" },
-  { id: "prayer", name: "بعد الصلاة", icon: "🕌" },
-  { id: "sleep", name: "عند النوم", icon: "😴" },
-  { id: "home", name: "المنزل والخروج", icon: "🏠" },
-  { id: "travel", name: "السفر", icon: "✈️" },
-  { id: "food", name: "الطعام", icon: "🍽️" },
-  { id: "general", name: "أدعية عامة", icon: "🤲" },
+  { id: "morning", name: "أذكار الصباح", icon: "sun" },
+  { id: "evening", name: "أذكار المساء", icon: "moon" },
+  { id: "prayer", name: "بعد الصلاة", icon: "compass" },
+  { id: "sleep", name: "عند النوم", icon: "moon" },
+  { id: "home", name: "المنزل والخروج", icon: "home" },
+  { id: "travel", name: "السفر", icon: "plane" },
+  { id: "food", name: "الطعام", icon: "food" },
+  { id: "general", name: "أدعية عامة", icon: "hands" },
 ] as const;
 
 export const ADHKAR: AdhkarItem[] = [

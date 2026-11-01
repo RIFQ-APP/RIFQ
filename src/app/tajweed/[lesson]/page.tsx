@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
+import { IconMic } from "@/components/icons";
 import Footer from "@/components/Footer";
 import { getLesson, TAJWEED_LESSONS } from "@/lib/data/tajweed";
 
@@ -34,6 +35,7 @@ export default async function LessonPage({ params }: PageProps) {
           ← العودة للدروس
         </Link>
 
+        <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-primary mb-3"><IconMic size={20} /></div>
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">{data.title}</h1>
         <p className="text-muted-foreground mb-8">{data.summary}</p>
 

@@ -8,6 +8,15 @@ import {
   getAdhkarByCategory,
   type AdhkarItem,
 } from "@/lib/data/adhkar";
+import {
+  IconSun,
+  IconMoon,
+  IconCompass,
+  IconHomeDoor,
+  IconPlane,
+  IconUtensils,
+  IconHands,
+} from "@/components/icons";
 
 function DhikrCard({ item }: { item: AdhkarItem }) {
   const [count, setCount] = useState(0);
@@ -68,6 +77,17 @@ function DhikrCard({ item }: { item: AdhkarItem }) {
   );
 }
 
+
+const CAT_ICON: Record<string, typeof IconSun> = {
+  sun: IconSun,
+  moon: IconMoon,
+  compass: IconCompass,
+  home: IconHomeDoor,
+  plane: IconPlane,
+  food: IconUtensils,
+  hands: IconHands,
+};
+
 export default function AdhkarPage() {
   const [category, setCategory] = useState("morning");
   const items = getAdhkarByCategory(category);
@@ -87,13 +107,14 @@ export default function AdhkarPage() {
               key={c.id}
               type="button"
               onClick={() => setCategory(c.id)}
-              className={`px-3 py-1.5 rounded-full text-sm transition-soft ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-soft ${
                 category === c.id
                   ? "bg-primary text-primary-foreground"
                   : "bg-secondary hover:bg-secondary/80"
               }`}
             >
-              {c.icon} {c.name}
+              {(() => { const I = CAT_ICON[c.icon] || IconHands; return <I size={16} />; })()}
+              {c.name}
             </button>
           ))}
         </div>

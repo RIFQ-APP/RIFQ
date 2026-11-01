@@ -6,6 +6,8 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { SURAH_NAMES_AR } from "@/lib/quran";
+import { IconUser } from "@/components/icons";
+import PageHeader from "@/components/PageHeader";
 
 interface User {
   id: string;
@@ -99,9 +101,13 @@ export default function DashboardPage() {
       <main className="flex-1 mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">
+            <PageHeader
+          icon={<IconUser size={22} />}
+          kicker="حسابك"
+          title="
               مرحباً{user?.name ? `، ${user.name}` : ""}
-            </h1>
+            "
+        />
             <p className="text-sm text-muted-foreground">{user?.email}</p>
           </div>
           <button

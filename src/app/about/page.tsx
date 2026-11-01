@@ -1,51 +1,75 @@
+import type { Metadata } from "next";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PageHeader from "@/components/PageHeader";
+import { IconHeart, IconBook, IconSparkles } from "@/components/icons";
 
-export const metadata = { title: "عن المنصة", description: "سياسة التوثيق والخصوصية" };
+export const metadata: Metadata = {
+  title: "عن رِفْق",
+  description: "تعرف على رؤية منصة رِفْق ومبادئها ومصادرها",
+};
 
-export default function Page() {
+export default function AboutPage() {
   return (
     <>
       <Header />
-      <main className="flex-1 mx-auto max-w-3xl px-4 py-12 sm:px-6">
-        <h1 className="text-3xl font-bold text-foreground mb-6">عن منصة رِفْق</h1>
-        
-        <section className="mb-10">
-          <h2 className="text-xl font-semibold mb-3">الشعار المعنوي</h2>
-          <p className="text-muted-foreground leading-relaxed">«تعلّم برفق، وافهم بعمق، واستمر بخطوات ثابتة»</p>
-        </section>
+      <main className="flex-1">
+        <section className="mx-auto max-w-3xl px-4 py-14">
+          <PageHeader
+            icon={<IconHeart size={22} />}
+            kicker="من نحن"
+            title="عن منصة رِفْق"
+            lead="رِفْق منصة إسلامية تعليمية تساعدك على قراءة القرآن الكريم، وحفظه، ومراجعته، وفهم معانيه، وتعلّم التجويد، مع مكتبات للحديث والأذكار والسيرة والفقه."
+          />
 
-        <section id="sources" className="mb-10">
-          <h2 className="text-xl font-semibold mb-3">سياسة التوثيق ومراجعة المحتوى</h2>
-          <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-            <li>كل نص قرآني يُعرض من مصدر موثوق دون تعديل أو توليد بالذكاء الاصطناعي.</li>
-            <li>الأحاديث تُعرض مع تخريجها ودرجة صحتها من مصادر معتمدة.</li>
-            <li>نفرّق بوضوح بين: النص الأصلي، الترجمة، التفسير المنقول، الشرح التعليمي، والملاحظات الشخصية.</li>
-            <li>لا نختلق أسباب نزول أو أقوال علماء أو فتاوى.</li>
-            <li>عند عدم توفر مصدر موثوق، نصرّح بذلك بدل إعطاء إجابة واثقة.</li>
-            <li>نرحب بالإبلاغ عن أي خطأ في النص أو المصدر.</li>
+          <div className="rounded-2xl border border-border bg-card p-6 mb-8">
+            <h2 className="font-semibold text-lg mb-2 flex items-center gap-2">
+              <IconSparkles size={18} className="text-primary" />
+              الشعار المعنوي
+            </h2>
+            <p className="text-primary font-medium text-lg">
+              «تعلّم برفق، وافهم بعمق، واستمر بخطوات ثابتة»
+            </p>
+          </div>
+
+          <h2 className="font-semibold text-lg mb-3">المبادئ</h2>
+          <ul className="space-y-3 text-muted-foreground mb-10">
+            <li className="flex gap-3">
+              <span className="text-primary font-bold">1</span>
+              <span>الموثوقية قبل كثرة المحتوى</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="text-primary font-bold">2</span>
+              <span>الوظائف الحقيقية قبل المظاهر</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="text-primary font-bold">3</span>
+              <span>سهولة الاستمرار قبل كثرة التعقيدات</span>
+            </li>
           </ul>
-        </section>
 
-        <section id="privacy" className="mb-10">
-          <h2 className="text-xl font-semibold mb-3">الخصوصية</h2>
-          <p className="text-muted-foreground leading-relaxed">
-            ملاحظاتك ومفضلاتك وتقدمك خاصة بك. لا نشارك بياناتك مع أطراف ثالثة دون موافقتك.
-            يمكنك حذف حسابك وبياناتك في أي وقت.
-          </p>
-        </section>
+          <h2 id="sources" className="font-semibold text-lg mb-3 scroll-mt-24">
+            المصادر والتوثيق
+          </h2>
+          <div className="rounded-2xl border border-border bg-muted/40 p-6 text-sm text-muted-foreground leading-relaxed mb-10 space-y-2">
+            <p>• نص القرآن من مصادر رقمية معتمدة شائعة الاستخدام في التطبيقات القرآنية.</p>
+            <p>• التفاسير من إصدارات معروفة (مثل التفسير الميسّر وغيره حسب المتاح).</p>
+            <p>• الأحاديث من كتب مشهورة مع ذكر المصدر عند العرض.</p>
+            <p>• يُفصَل دائماً بين النص الأصلي وبين الشرح أو الترجمة.</p>
+            <p>• لا يُستبدل حكم شرعي أو فتوى شخصية بمنصة تعليمية؛ راجع أهل العلم عند الحاجة.</p>
+          </div>
 
-        <section id="terms" className="mb-10">
-          <h2 className="text-xl font-semibold mb-3">شروط الاستخدام</h2>
-          <p className="text-muted-foreground leading-relaxed">
-            المنصة أداة مساعدة للتعلّم. الفتاوى الشخصية تحتاج إلى الرجوع لأهل العلم المؤهلين.
-            المحتوى الديني المعروض يخضع للمراجعة، وأي خطأ يُصحح فور الإبلاغ عنه.
-          </p>
-        </section>
-
-        <section id="contact" className="mb-10">
-          <h2 className="text-xl font-semibold mb-3">تواصل معنا</h2>
-          <p className="text-muted-foreground">للإبلاغ عن خطأ أو اقتراح تحسين: سيتم توفير قناة تواصل رسمية قريباً.</p>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/support" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-medium">
+              <IconHeart size={16} />
+              ادعم المشروع
+            </Link>
+            <Link href="/quran" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border text-sm font-medium">
+              <IconBook size={16} />
+              ابدأ بالمصحف
+            </Link>
+          </div>
         </section>
       </main>
       <Footer />

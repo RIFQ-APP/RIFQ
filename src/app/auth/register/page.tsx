@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { IconUser } from "@/components/icons";
+import PageHeader from "@/components/PageHeader";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -43,7 +45,11 @@ export default function RegisterPage() {
       <Header />
       <main className="flex-1 flex items-center justify-center px-4 py-16">
         <div className="card w-full max-w-md p-8">
-          <h1 className="text-2xl font-bold text-center mb-6">إنشاء حساب</h1>
+          <PageHeader
+          icon={<IconUser size={22} />}
+          kicker="حساب جديد"
+          title="إنشاء حساب"
+        />
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-1.5">الاسم</label>

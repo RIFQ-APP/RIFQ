@@ -36,6 +36,7 @@ export const metadata: Metadata = {
     "رِفْق",
   ],
   authors: [{ name: "RIFQ Team" }],
+  manifest: "/manifest.json",
   openGraph: {
     title: "رِفْق | RIFQ",
     description: "منصة إسلامية متكاملة للقرآن الكريم والحفظ والفهم والتعلّم",
@@ -63,7 +64,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+      <body className={`${cairo.variable} ${amiri.variable} font-sans antialiased min-h-screen flex flex-col bg-background text-foreground`}>
         {children}
       </body>
     </html>

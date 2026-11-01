@@ -2,6 +2,7 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { TAJWEED_LESSONS } from "@/lib/data/tajweed";
+import { IconMic, IconBookOpen } from "@/components/icons";
 
 export const metadata = {
   title: "أكاديمية التجويد",
@@ -22,6 +23,10 @@ export default function TajweedPage() {
       <Header />
       <main className="flex-1 mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8">
+          <div className="inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-primary mb-3">
+            <IconMic size={14} />
+            مسار متدرج
+          </div>
           <h1 className="text-3xl font-bold text-foreground mb-2">أكاديمية التجويد</h1>
           <p className="text-muted-foreground">
             مسار متدرج من المقدمات إلى الأحكام. كل درس يتضمن تعريفاً وأمثلة وأخطاء شائعة ومراجع.
@@ -44,7 +49,7 @@ export default function TajweedPage() {
                 href={`/tajweed/${lesson.id}`}
                 className="card p-5 flex items-start gap-4 transition-soft hover:border-primary/40 group"
               >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary text-primary font-bold text-sm group-hover:bg-primary group-hover:text-primary-foreground transition-soft">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-primary font-bold text-sm group-hover:bg-primary group-hover:text-primary-foreground transition-soft">
                   {lesson.order}
                 </div>
                 <div className="min-w-0 flex-1">

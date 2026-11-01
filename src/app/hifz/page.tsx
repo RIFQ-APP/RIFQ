@@ -5,6 +5,8 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { SURAH_NAMES_AR } from "@/lib/quran";
+import { IconBrain } from "@/components/icons";
+import PageHeader from "@/components/PageHeader";
 
 const STATUSES = [
   { id: "not_started", label: "لم أبدأ", color: "bg-muted text-muted-foreground", emoji: "○" },
@@ -258,7 +260,11 @@ export default function HifzPage() {
     <>
       <Header />
       <main className="flex-1 mx-auto max-w-3xl px-4 py-8 sm:px-6">
-        <h1 className="text-3xl font-bold mb-2">أكاديمية الحفظ</h1>
+        <PageHeader
+          icon={<IconBrain size={22} />}
+          kicker="الحفظ"
+          title="أكاديمية الحفظ"
+        />
         <p className="text-muted-foreground text-sm mb-6">
           تتبع وتدريب تفاعلي. التقدم يُحفظ على جهازك{isLoggedIn ? " وفي حسابك" : ""}.
         </p>

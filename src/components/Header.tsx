@@ -4,16 +4,32 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import {
+  IconBook,
+  IconSparkles,
+  IconBrain,
+  IconMic,
+  IconHands,
+  IconCheck,
+  IconScroll,
+  IconSearch,
+  IconMenu,
+  IconX,
+  IconUser,
+  IconAward,
+} from "@/components/icons";
 
 const navItems = [
-  { href: "/quran", label: "المصحف" },
-  { href: "/tafsir", label: "التفسير" },
-  { href: "/hifz", label: "الحفظ" },
-  { href: "/tajweed", label: "التجويد" },
-  { href: "/adhkar", label: "الأذكار" },
-  { href: "/library", label: "المكتبة" },
-  { href: "/quizzes", label: "اختبارات" },
-  { href: "/search", label: "البحث" },
+  { href: "/quran", label: "المصحف", Icon: IconBook },
+  { href: "/tafsir", label: "التفسير", Icon: IconSparkles },
+  { href: "/hifz", label: "الحفظ", Icon: IconBrain },
+  { href: "/tajweed", label: "التجويد", Icon: IconMic },
+  { href: "/adhkar", label: "الأذكار", Icon: IconHands },
+  { href: "/wird", label: "الورد", Icon: IconCheck },
+  { href: "/library", label: "المكتبة", Icon: IconScroll },
+  { href: "/search", label: "البحث", Icon: IconSearch },
+  { href: "/quizzes", label: "اختبارات", Icon: IconAward },
+  // quizzes in mobile extra
 ];
 
 export default function Header() {
@@ -64,8 +80,9 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`nav-link text-sm font-medium ${isActive ? "active" : ""}`}
+                className={`nav-link text-sm font-medium inline-flex items-center gap-1.5 ${isActive ? "active" : ""}`}
               >
+                <item.Icon size={15} className="opacity-80" />
                 {item.label}
               </Link>
             );
@@ -104,7 +121,7 @@ export default function Header() {
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="القائمة"
           >
-            {mobileOpen ? "✕" : "☰"}
+            {mobileOpen ? <IconX size={22} /> : <IconMenu size={22} />}
           </button>
         </div>
       </div>
@@ -116,8 +133,9 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`nav-link text-sm font-medium ${pathname.startsWith(item.href) ? "active" : ""}`}
+                className={`nav-link text-sm font-medium inline-flex items-center gap-2 ${pathname.startsWith(item.href) ? "active" : ""}`}
               >
+                <item.Icon size={15} className="opacity-80" />
                 {item.label}
               </Link>
             ))}

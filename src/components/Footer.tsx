@@ -1,45 +1,109 @@
 import Link from "next/link";
+import {
+  IconBook,
+  IconSparkles,
+  IconBrain,
+  IconMic,
+  IconScroll,
+  IconHands,
+  IconCalendar,
+  IconSearch,
+  IconLeaf,
+  IconAward,
+  IconHeart,
+  IconMessage,
+  IconUser,
+  IconCheck,
+  IconBookmark,
+} from "@/components/icons";
+
+const sections = [
+  { href: "/quran", label: "المصحف", Icon: IconBook },
+  { href: "/tafsir", label: "التفسير", Icon: IconSparkles },
+  { href: "/hifz", label: "الحفظ", Icon: IconBrain },
+  { href: "/tajweed", label: "التجويد", Icon: IconMic },
+  { href: "/library/hadith", label: "الحديث", Icon: IconScroll },
+  { href: "/adhkar", label: "الأذكار", Icon: IconHands },
+] as const;
+
+const tools = [
+  { href: "/plan", label: "خطة التعلم", Icon: IconCalendar },
+  { href: "/dashboard", label: "لوحة التحكم", Icon: IconUser },
+  { href: "/search", label: "البحث", Icon: IconSearch },
+  { href: "/tadabbur", label: "التدبّر", Icon: IconLeaf },
+  { href: "/quizzes", label: "الاختبارات", Icon: IconAward },
+  { href: "/wird", label: "ورد اليوم", Icon: IconCheck },
+] as const;
+
+const platform = [
+  { href: "/about", label: "عن رِفْق", Icon: IconHeart },
+  { href: "/about#sources", label: "سياسة التوثيق", Icon: IconScroll },
+  { href: "/support", label: "ادعم المشروع", Icon: IconHeart },
+  { href: "/contact", label: "تواصل معنا", Icon: IconMessage },
+  { href: "/privacy", label: "الخصوصية", Icon: IconScroll },
+  { href: "/bookmarks", label: "المرجعيات", Icon: IconBookmark },
+  { href: "/faq", label: "الأسئلة الشائعة", Icon: IconMessage },
+  { href: "/auth/register", label: "إنشاء حساب", Icon: IconUser },
+] as const;
 
 export default function Footer() {
   return (
-    <footer className="mt-auto border-t border-border bg-card">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
+    <footer className="border-t border-border bg-card mt-auto">
+      <div className="mx-auto max-w-6xl px-4 py-12">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">ر</div>
+            <Link href="/" className="flex items-center gap-2 mb-3">
+              <img src="/logo.svg" alt="" className="h-9 w-9" width={36} height={36} />
               <span className="text-lg font-bold text-primary">رِفْق</span>
-            </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">تعلّم برفق، وافهم بعمق، واستمر بخطوات ثابتة.</p>
+            </Link>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              تعلّم برفق، وافهم بعمق، واستمر بخطوات ثابتة.
+            </p>
           </div>
           <div>
             <h3 className="text-sm font-semibold mb-3">الأقسام</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/quran" className="hover:text-primary transition-soft">المصحف</Link></li>
-              <li><Link href="/hifz" className="hover:text-primary transition-soft">الحفظ</Link></li>
-              <li><Link href="/tajweed" className="hover:text-primary transition-soft">التجويد</Link></li>
-              <li><Link href="/library/hadith" className="hover:text-primary transition-soft">الحديث</Link></li>
-              <li><Link href="/library/seerah" className="hover:text-primary transition-soft">السيرة</Link></li>
-              <li><Link href="/quizzes" className="hover:text-primary transition-soft">الاختبارات</Link></li>
+              {sections.map((s) => (
+                <li key={s.href}>
+                  <Link href={s.href} className="inline-flex items-center gap-2 hover:text-primary transition-soft">
+                    <s.Icon size={15} className="text-primary/80" />
+                    {s.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
           <div>
             <h3 className="text-sm font-semibold mb-3">أدواتك</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/plan" className="hover:text-primary transition-soft">خطة التعلم</Link></li>
-              <li><Link href="/dashboard" className="hover:text-primary transition-soft">لوحة التحكم</Link></li>
-              <li><Link href="/search" className="hover:text-primary transition-soft">البحث</Link></li>
-              <li><Link href="/adhkar" className="hover:text-primary transition-soft">الأذكار</Link></li>
+              {tools.map((s) => (
+                <li key={s.href}>
+                  <Link href={s.href} className="inline-flex items-center gap-2 hover:text-primary transition-soft">
+                    <s.Icon size={15} className="text-primary/80" />
+                    {s.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
           <div>
-            <h3 className="text-sm font-semibold mb-3">الموثوقية</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed mb-2">نصوص من مصادر معروفة، وفصل واضح بين الأصل والشرح.</p>
-            <Link href="/about#sources" className="text-sm text-primary hover:underline">سياسة التوثيق</Link>
+            <h3 className="text-sm font-semibold mb-3">المنصة</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              {platform.map((s) => (
+                <li key={s.href}>
+                  <Link href={s.href} className="inline-flex items-center gap-2 hover:text-primary transition-soft">
+                    <s.Icon size={15} className="text-primary/80" />
+                    {s.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
         <div className="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} رِفْق | RIFQ</p>
+          <p className="text-xs text-muted-foreground">
+            © {new Date().getFullYear()} رِفْق | RIFQ — جميع الحقوق محفوظة
+          </p>
           <p className="text-xs text-muted-foreground">الموثوقية قبل كثرة المحتوى</p>
         </div>
       </div>

@@ -9,6 +9,8 @@ import { ADHKAR } from "@/lib/data/adhkar";
 import { TAJWEED_LESSONS } from "@/lib/data/tajweed";
 import { HADITHS } from "@/lib/data/hadith";
 import { FIQH_TOPICS } from "@/lib/data/fiqh";
+import { IconSearch } from "@/components/icons";
+import PageHeader from "@/components/PageHeader";
 
 type Tab = "ayahs" | "all" | "surahs" | "adhkar" | "tajweed" | "hadith" | "fiqh";
 
@@ -102,7 +104,11 @@ export default function SearchPage() {
     <>
       <Header />
       <main className="flex-1 mx-auto max-w-3xl px-4 py-8 sm:px-6">
-        <h1 className="text-3xl font-bold mb-6">البحث</h1>
+        <PageHeader
+          icon={<IconSearch size={22} />}
+          kicker="البحث"
+          title="البحث"
+        />
 
         <div className="flex gap-2 mb-4">
           <input

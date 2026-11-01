@@ -248,6 +248,19 @@ export const HADITHS: HadithItem[] = [
   { id: "x79", collection: "other", book: "سنن أبي داود", number: "الوتر", text: "أَوْتِرُوا يَا أَهْلَ الْقُرْآنِ.", grade: "رواه أبو داود والترمذي", gradeSource: "أبو داود", topics: ["الصلاة", "القرآن"] },
   { id: "x80", collection: "other", book: "مسند أحمد", number: "—", text: "أَحَبُّ الْأَعْمَالِ إِلَى اللَّهِ تَعَالَى أَدْوَمُهَا وَإِنْ قَلَّ.", grade: "متفق عليه", gradeSource: "البخاري ومسلم", topics: ["النية", "القلب والنية الباطنة"] },
 
+
+  { id: "x1", collection: "riyad", book: "رياض الصالحين", number: "—", text: "المسلم من سلم المسلمون من لسانه ويده.", grade: "متفق عليه", gradeSource: "البخاري ومسلم", topics: ["الأخلاق", "الجار والمجتمع"] },
+  { id: "x2", collection: "riyad", book: "رياض الصالحين", number: "—", text: "لا يدخل الجنة من كان في قلبه مثقال ذرة من كبر.", grade: "صحيح", gradeSource: "مسلم", topics: ["الأخلاق", "القلب والنية الباطنة"] },
+  { id: "x3", collection: "bukhari", book: "صحيح البخاري", number: "—", text: "إن الله لا ينظر إلى صوركم وأموالكم، ولكن ينظر إلى قلوبكم وأعمالكم.", grade: "صحيح", gradeSource: "مسلم", topics: ["القلب والنية الباطنة", "الأخلاق"] },
+  { id: "x4", collection: "muslim", book: "صحيح مسلم", number: "—", text: "الطهور شطر الإيمان.", grade: "صحيح", gradeSource: "مسلم", topics: ["الإيمان", "الصلاة"] },
+  { id: "x5", collection: "riyad", book: "رياض الصالحين", number: "—", text: "من لا يشكر الناس لا يشكر الله.", grade: "صحيح / حسن", gradeSource: "الترمذي", topics: ["الأخلاق", "الصبر والشكر"] },
+  { id: "x6", collection: "nawawi", book: "الأربعون النووية", number: "—", text: "من كان يؤمن بالله واليوم الآخر فليقل خيراً أو ليصمت.", grade: "متفق عليه", gradeSource: "البخاري ومسلم", topics: ["الأخلاق", "الإيمان"] },
+  { id: "x7", collection: "bukhari", book: "صحيح البخاري", number: "—", text: "خيركم من تعلم القرآن وعلمه.", grade: "صحيح", gradeSource: "البخاري", topics: ["القرآن", "العلم"] },
+  { id: "x8", collection: "muslim", book: "صحيح مسلم", number: "—", text: "الصلوات الخمس، والجمعة إلى الجمعة، ورمضان إلى رمضان، مكفرات ما بينهن إذا اجتنبت الكبائر.", grade: "صحيح", gradeSource: "مسلم", topics: ["الصلاة", "الصيام"] },
+  { id: "x9", collection: "riyad", book: "رياض الصالحين", number: "—", text: "احفظ الله يحفظك.", grade: "صحيح / حسن", gradeSource: "الترمذي", topics: ["الورع والحلال", "الإيمان"] },
+  { id: "x10", collection: "other", book: "سنن أبي داود", number: "—", text: "من سلك طريقاً يلتمس فيه علماً سهل الله له طريقاً إلى الجنة.", grade: "صحيح", gradeSource: "مسلم", topics: ["العلم"] },
+  { id: "x11", collection: "riyad", book: "رياض الصالحين", number: "—", text: "الدنيا سجن المؤمن وجنة الكافر.", grade: "صحيح", gradeSource: "مسلم", topics: ["القيامة والآخرة", "الصبر والشكر"] },
+  { id: "x12", collection: "bukhari", book: "صحيح البخاري", number: "—", text: "آية المنافق ثلاث: إذا حدّث كذب، وإذا وعد أخلف، وإذا اؤتمن خان.", grade: "متفق عليه", gradeSource: "البخاري ومسلم", topics: ["الأخلاق", "الإيمان"] },
 ];
 
 export function searchHadiths(q: string) {

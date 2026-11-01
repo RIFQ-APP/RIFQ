@@ -6,6 +6,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { TAFSIR_EDITIONS } from "@/lib/data/tafsir";
 import { SURAH_NAMES_AR } from "@/lib/quran";
+import { IconSparkles } from "@/components/icons";
+import PageHeader from "@/components/PageHeader";
 
 export default function TafsirHomePage() {
   const [step, setStep] = useState<"surah" | "source">("surah");
@@ -20,7 +22,11 @@ export default function TafsirHomePage() {
     <>
       <Header />
       <main className="flex-1 mx-auto max-w-5xl px-4 py-8 sm:px-6">
-        <h1 className="text-3xl font-bold mb-2">موسوعة التفسير</h1>
+        <PageHeader
+          icon={<IconSparkles size={22} />}
+          kicker="التفسير"
+          title="موسوعة التفسير"
+        />
         <p className="text-muted-foreground text-sm mb-6">
           اختر السورة أولاً، ثم المصدر — أو قارن عدة تفاسير لآية واحدة.
         </p>

@@ -9,12 +9,12 @@ export interface QuizQuestion {
 }
 
 export const QUIZ_CATEGORIES = [
-  { id: "tajweed", name: "تجويد" },
-  { id: "seerah", name: "سيرة" },
-  { id: "adhkar", name: "أذكار" },
-  { id: "quran", name: "قرآن" },
-  { id: "fiqh", name: "فقه" },
-  { id: "hadith", name: "حديث" },
+  { id: "tajweed", name: "التجويد", desc: "مخارج، أحكام النون، المدود، والقلقلة", level: "متوسط" },
+  { id: "seerah", name: "السيرة النبوية", desc: "مراحل حياة النبي ﷺ وأحداث بارزة", level: "سهل" },
+  { id: "adhkar", name: "الأذكار والأدعية", desc: "أذكار الصباح والمساء والصلاة", level: "سهل" },
+  { id: "quran", name: "علوم القرآن", desc: "السور، الأحكام، ومعاني أساسية", level: "متوسط" },
+  { id: "fiqh", name: "الفقه", desc: "طهار، صلاة، صيام، وزكاة مبسّطة", level: "متوسط" },
+  { id: "hadith", name: "الحديث الشريف", desc: "أحاديث مشهورة ومصدرها", level: "متوسط" },
 ] as const;
 
 export const QUIZ_QUESTIONS: QuizQuestion[] = [

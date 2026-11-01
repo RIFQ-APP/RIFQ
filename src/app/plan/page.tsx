@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import { IconCalendar } from "@/components/icons";
+import PageHeader from "@/components/PageHeader";
 
 interface DayPlan {
   date: string;
@@ -69,7 +71,11 @@ export default function PlanPage() {
     <>
       <Header />
       <main className="flex-1 mx-auto max-w-3xl px-4 py-8 sm:px-6">
-        <h1 className="text-3xl font-bold mb-2">خطة التعلم</h1>
+        <PageHeader
+          icon={<IconCalendar size={22} />}
+          kicker="التنظيم"
+          title="خطة التعلم"
+        />
         <p className="text-muted-foreground text-sm mb-6">
           خطط مرنة ليومك. لا تفرض كمية محددة — فقط تتبع ما أنجزت برفق.
         </p>

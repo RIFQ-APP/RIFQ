@@ -1,6 +1,8 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { SEERAH_TIMELINE } from "@/lib/data/seerah";
+import { IconMap } from "@/components/icons";
+import PageHeader from "@/components/PageHeader";
 
 export const metadata = {
   title: "السيرة النبوية",
@@ -12,7 +14,11 @@ export default function SeerahPage() {
     <>
       <Header />
       <main className="flex-1 mx-auto max-w-3xl px-4 py-8 sm:px-6">
-        <h1 className="text-3xl font-bold text-foreground mb-2">السيرة النبوية</h1>
+        <PageHeader
+          icon={<IconMap size={22} />}
+          kicker="السيرة"
+          title="السيرة النبوية"
+        />
         <p className="text-muted-foreground mb-8">
           خط زمني موجز لأهم الأحداث. مع ذكر المصادر، والتمييز بين الثابت والمشهور.
         </p>

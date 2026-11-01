@@ -27,6 +27,23 @@ interface TafsirItem {
   level?: string;
 }
 
+
+const BM_KEY = "rifq_bookmarks";
+function addLocalBookmark(surahNumber: number, ayahNumber: number) {
+  try {
+    const list = JSON.parse(localStorage.getItem(BM_KEY) || "[]") as Array<{
+      id: string; surahNumber: number; ayahNumber: number; createdAt: string;
+    }>;
+    const id = `${surahNumber}:${ayahNumber}`;
+    if (list.some((x) => x.id === id)) return false;
+    list.unshift({ id, surahNumber, ayahNumber, createdAt: new Date().toISOString() });
+    localStorage.setItem(BM_KEY, JSON.stringify(list.slice(0, 200)));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export default function SurahReader({
   surahNumber,
   surahName,
@@ -289,6 +306,17 @@ export default function SurahReader({
                     }}
                   >
                     {favorites.has(ayah.numberInSurah) ? "★ مفضلة" : "☆ مفضلة"}
+                  </button>
+                  <button
+                    type="button"
+                    className="text-xs px-2.5 py-1 rounded-md bg-secondary hover:bg-primary hover:text-primary-foreground transition-soft"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const ok = addLocalBookmark(surahNumber, ayah.numberInSurah);
+                      alert(ok ? "تمت الإضافة للمرجعيات على هذا الجهاز" : "موجودة مسبقاً أو تعذّر الحفظ");
+                    }}
+                  >
+                    📌 مرجعية
                   </button>
                   <button
                     type="button"

@@ -5,6 +5,7 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { MUTASHABIHAT, TADABBUR_PROMPTS } from "@/lib/data/mutashabihat";
+import { IconLeaf, IconBookOpen } from "@/components/icons";
 
 export default function TadabburPage() {
   const [notes, setNotes] = useState<Record<string, string>>({});
@@ -14,6 +15,10 @@ export default function TadabburPage() {
     <>
       <Header />
       <main className="flex-1 mx-auto max-w-3xl px-4 py-8 sm:px-6">
+        <div className="inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-primary mb-3">
+          <IconLeaf size={14} />
+          مساحة هادئة
+        </div>
         <h1 className="text-3xl font-bold mb-2">تدبّر القرآن</h1>
         <p className="text-muted-foreground text-sm mb-6">
           مساحة هادئة للتفكر: متشابهات لفظية، وأسئلة تدبّر، وملاحظاتك الخاصة على الجهاز.
