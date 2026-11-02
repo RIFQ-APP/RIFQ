@@ -2,14 +2,13 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SurahReader from "@/components/quran/SurahReader";
-import { getSurah, SURAH_NAMES_AR, LOCAL_SURAHS } from "@/lib/quran";
+import { getSurah, SURAH_NAMES_AR } from "@/lib/quran";
+
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
 
 interface PageProps {
   params: Promise<{ surah: string }>;
-}
-
-export function generateStaticParams() {
-  return LOCAL_SURAHS.map((s) => ({ surah: String(s.number) }));
 }
 
 export async function generateMetadata({ params }: PageProps) {
@@ -44,7 +43,7 @@ export default async function SurahPage({ params }: PageProps) {
   const data = await getSurah(surahNumber);
   const nameAr = SURAH_NAMES_AR[surahNumber] || data?.name || `سورة ${surahNumber}`;
   const revelationType = data?.revelationType || "Meccan";
-  const ayahs = data?.ayahs || [];
+  const ayahs = data?.ayahs ?? [];
   const prev = surahNumber > 1 ? surahNumber - 1 : null;
   const next = surahNumber < 114 ? surahNumber + 1 : null;
 

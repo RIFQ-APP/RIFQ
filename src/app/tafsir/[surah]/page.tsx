@@ -2,15 +2,14 @@ import { Suspense } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { getSurah, SURAH_NAMES_AR, LOCAL_SURAHS } from "@/lib/quran";
+import { getSurah, SURAH_NAMES_AR } from "@/lib/quran";
 import TafsirSurahClient from "@/components/tafsir/TafsirSurahClient";
+
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
 
 interface PageProps {
   params: Promise<{ surah: string }>;
-}
-
-export function generateStaticParams() {
-  return LOCAL_SURAHS.map((s) => ({ surah: String(s.number) }));
 }
 
 export async function generateMetadata({ params }: PageProps) {
@@ -29,7 +28,9 @@ export default async function TafsirSurahPage({ params }: PageProps) {
         <Header />
         <main className="flex-1 mx-auto max-w-4xl px-4 py-16 text-center">
           <p className="text-muted-foreground mb-4">سورة غير صالحة.</p>
-          <Link href="/tafsir" className="btn-primary inline-block">العودة للتفسير</Link>
+          <Link href="/tafsir" className="btn-primary inline-block">
+            العودة للتفسير
+          </Link>
         </main>
         <Footer />
       </>
@@ -38,7 +39,7 @@ export default async function TafsirSurahPage({ params }: PageProps) {
 
   const data = await getSurah(surahNumber);
   const nameAr = SURAH_NAMES_AR[surahNumber] || data?.name || `سورة ${surahNumber}`;
-  const ayahs = (data?.ayahs || []).map((a) => ({
+  const ayahs = (data?.ayahs ?? []).map((a) => ({
     numberInSurah: a.numberInSurah,
     text: a.text,
   }));
@@ -47,7 +48,11 @@ export default async function TafsirSurahPage({ params }: PageProps) {
     <>
       <Header />
       <main className="flex-1">
-        <Suspense fallback={<p className="text-center py-12 text-muted-foreground">جاري التحميل...</p>}>
+        <Suspense
+          fallback={
+            <p className="text-center py-12 text-muted-foreground">جاري التحميل...</p>
+          }
+        >
           <TafsirSurahClient
             surahNumber={surahNumber}
             surahName={nameAr}

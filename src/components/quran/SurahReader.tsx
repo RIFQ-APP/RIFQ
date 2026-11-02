@@ -62,12 +62,12 @@ export default function SurahReader({
   const [tafsirList, setTafsirList] = useState<TafsirItem[]>([]);
   const [tafsirError, setTafsirError] = useState<string | null>(null);
   const [tafsirLoading, setTafsirLoading] = useState(false);
-  const [ayahList, setAyahList] = useState<Ayah[]>(ayahs);
+  const [ayahList, setAyahList] = useState<Ayah[]>(ayahs ?? []);
   const [loadingText, setLoadingText] = useState(ayahList.length === 0);
 
   useEffect(() => {
-    setAyahList(ayahs);
-    if (ayahs.length > 0) {
+    setAyahList(ayahs ?? []);
+    if ((ayahs ?? []).length > 0) {
       setLoadingText(false);
       return;
     }
@@ -298,7 +298,7 @@ export default function SurahReader({
         )}
 
         <div className="space-y-2">
-          {ayahList.map((ayah) => {
+          {(ayahList ?? []).map((ayah) => {
             const isActive = currentAyah === ayah.numberInSurah;
             return (
               <div

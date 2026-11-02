@@ -327,3 +327,13 @@ export async function getAyah(surahNumber: number, ayahNumber: number) {
 export function getSurahMeta(n: number) {
   return LOCAL_SURAHS.find((s) => s.number === n) || null;
 }
+
+
+export const RECITERS = [
+  { id: "ar.alafasy", name: "مشاري العفاسي" },
+  { id: "ar.abdulbasitmurattal", name: "عبد الباسط مرتل" },
+  { id: "ar.husary", name: "محمود خليل الحصري" },
+  { id: "ar.minshawi", name: "محمد صديق المنشاوي" },
+  { id: "ar.shaatree", name: "أبو بكر الشاطري" },
+  { id: "ar.hudhaify", name: "علي الحذيفي" },
+] as const;

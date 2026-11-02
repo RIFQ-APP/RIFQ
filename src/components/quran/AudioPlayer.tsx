@@ -189,7 +189,7 @@ export default function AudioPlayer({
               className="text-xs rounded-md border border-input bg-background px-2 py-1.5 max-w-[140px]"
               aria-label="اختر القارئ"
             >
-              {RECITERS.map((r) => (
+              {(RECITERS || []).map((r) => (
                 <option key={r.id} value={r.id}>
                   {r.name}
                 </option>
