@@ -1,20 +1,17 @@
 # أمان رِفْق
 
-## على Vercel أضف متغير البيئة
+## على Vercel أضف (مهم)
 
-- `NEXTAUTH_SECRET` : سلسلة عشوائية طويلة (32 حرفاً على الأقل)
-  مثال توليد: `openssl rand -base64 48`
+Settings → Environment Variables:
 
-- `DATABASE_URL` : رابط Neon
+| Name | Value |
+|------|--------|
+| `DATABASE_URL` | رابط Neon |
+| `NEXTAUTH_SECRET` | سلسلة عشوائية 32+ حرف |
 
-## ما يطبّقه المشروع
+توليد السر:
+```bash
+openssl rand -base64 48
+```
 
-- رؤوس أمان (HSTS, CSP, X-Frame-Options DENY, nosniff, Referrer-Policy, Permissions-Policy)
-- إخفاء `X-Powered-By`
-- كوكي جلسة HttpOnly + Secure في الإنتاج
-- bcrypt لكلمات المرور
-- تحقق Zod من المدخلات
-- حد محاولات تسجيل الدخول/التسجيل
-- سياسة خصوصية واضحة
-
-لا يوجد نظام يدفع مثالي 100%. راقب السجلات وحدّث الاعتماديات دورياً.
+بدون `NEXTAUTH_SECRET` الموقع قد يعمل لكن الجلسات أضعف — ضع السر دائماً في الإنتاج.

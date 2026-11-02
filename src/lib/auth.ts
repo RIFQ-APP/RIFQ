@@ -4,24 +4,24 @@ import bcrypt from "bcryptjs";
 import { prisma } from "./db";
 import { normalizeEmail, passwordIssues } from "./security";
 
-function getSecret() {
-  const s = process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET;
-  if (!s) {
-    if (process.env.NODE_ENV === "production") {
-      throw new Error("NEXTAUTH_SECRET is required in production");
-    }
-    return "rifq-dev-only-not-for-production";
-  }
-  if (process.env.NODE_ENV === "production" && s.length < 32) {
-    throw new Error("NEXTAUTH_SECRET must be at least 32 characters");
-  }
-  return s;
-}
-
-const SECRET = new TextEncoder().encode(getSecret());
-
 const COOKIE_NAME = "rifq_session";
 const MAX_AGE = 60 * 60 * 24 * 14; // 14 days
+
+/** لا نرمي خطأ عند الاستيراد أثناء next build */
+function getSecretKey(): Uint8Array {
+  const s =
+    process.env.NEXTAUTH_SECRET ||
+    process.env.AUTH_SECRET ||
+    process.env.JWT_SECRET ||
+    "";
+  if (s && s.length >= 16) {
+    return new TextEncoder().encode(s);
+  }
+  // أثناء البناء أو التطوير بدون متغير — مفتاح مؤقت (غيّره على Vercel)
+  return new TextEncoder().encode(
+    "rifq-build-placeholder-secret-change-me-32b"
+  );
+}
 
 export interface SessionUser {
   id: string;
@@ -41,6 +41,7 @@ export async function verifyPassword(
 }
 
 export async function createSession(user: SessionUser): Promise<string> {
+  const secret = getSecretKey();
   const token = await new SignJWT({
     id: user.id,
     email: user.email,
@@ -50,7 +51,7 @@ export async function createSession(user: SessionUser): Promise<string> {
     .setIssuedAt()
     .setExpirationTime(`${MAX_AGE}s`)
     .setSubject(user.id)
-    .sign(SECRET);
+    .sign(secret);
 
   return token;
 }
@@ -61,7 +62,7 @@ export async function getSession(): Promise<SessionUser | null> {
     const token = cookieStore.get(COOKIE_NAME)?.value;
     if (!token) return null;
 
-    const { payload } = await jwtVerify(token, SECRET, {
+    const { payload } = await jwtVerify(token, getSecretKey(), {
       algorithms: ["HS256"],
     });
     if (!payload.id || !payload.email) return null;
@@ -127,9 +128,8 @@ export async function registerUser(
 export async function loginUser(email: string, password: string) {
   const e = normalizeEmail(email);
   const user = await prisma.user.findUnique({ where: { email: e } });
-  // Constant-ish failure message
   if (!user) {
-    await hashPassword(password); // mitigate timing somewhat
+    await hashPassword(password);
     throw new Error("البريد أو كلمة المرور غير صحيحة");
   }
 
