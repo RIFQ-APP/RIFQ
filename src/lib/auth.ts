@@ -2,13 +2,26 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 import { prisma } from "./db";
+import { normalizeEmail, passwordIssues } from "./security";
 
-const SECRET = new TextEncoder().encode(
-  process.env.NEXTAUTH_SECRET || "rifq-dev-secret-change-in-production-2026"
-);
+function getSecret() {
+  const s = process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET;
+  if (!s) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("NEXTAUTH_SECRET is required in production");
+    }
+    return "rifq-dev-only-not-for-production";
+  }
+  if (process.env.NODE_ENV === "production" && s.length < 32) {
+    throw new Error("NEXTAUTH_SECRET must be at least 32 characters");
+  }
+  return s;
+}
+
+const SECRET = new TextEncoder().encode(getSecret());
 
 const COOKIE_NAME = "rifq_session";
-const MAX_AGE = 60 * 60 * 24 * 30; // 30 days
+const MAX_AGE = 60 * 60 * 24 * 14; // 14 days
 
 export interface SessionUser {
   id: string;
@@ -36,6 +49,7 @@ export async function createSession(user: SessionUser): Promise<string> {
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime(`${MAX_AGE}s`)
+    .setSubject(user.id)
     .sign(SECRET);
 
   return token;
@@ -47,7 +61,10 @@ export async function getSession(): Promise<SessionUser | null> {
     const token = cookieStore.get(COOKIE_NAME)?.value;
     if (!token) return null;
 
-    const { payload } = await jwtVerify(token, SECRET);
+    const { payload } = await jwtVerify(token, SECRET, {
+      algorithms: ["HS256"],
+    });
+    if (!payload.id || !payload.email) return null;
     return {
       id: payload.id as string,
       email: payload.email as string,
@@ -71,7 +88,13 @@ export async function setSessionCookie(token: string) {
 
 export async function clearSessionCookie() {
   const cookieStore = await cookies();
-  cookieStore.delete(COOKIE_NAME);
+  cookieStore.set(COOKIE_NAME, "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 0,
+    path: "/",
+  });
 }
 
 export async function registerUser(
@@ -79,7 +102,11 @@ export async function registerUser(
   password: string,
   name?: string
 ) {
-  const existing = await prisma.user.findUnique({ where: { email } });
+  const e = normalizeEmail(email);
+  const pwIssue = passwordIssues(password);
+  if (pwIssue) throw new Error(pwIssue);
+
+  const existing = await prisma.user.findUnique({ where: { email: e } });
   if (existing) {
     throw new Error("البريد الإلكتروني مستخدم بالفعل");
   }
@@ -87,9 +114,9 @@ export async function registerUser(
   const passwordHash = await hashPassword(password);
   const user = await prisma.user.create({
     data: {
-      email,
+      email: e,
       passwordHash,
-      name: name || null,
+      name: name?.trim().slice(0, 80) || null,
       preferences: { create: {} },
     },
   });
@@ -98,8 +125,11 @@ export async function registerUser(
 }
 
 export async function loginUser(email: string, password: string) {
-  const user = await prisma.user.findUnique({ where: { email } });
+  const e = normalizeEmail(email);
+  const user = await prisma.user.findUnique({ where: { email: e } });
+  // Constant-ish failure message
   if (!user) {
+    await hashPassword(password); // mitigate timing somewhat
     throw new Error("البريد أو كلمة المرور غير صحيحة");
   }
 

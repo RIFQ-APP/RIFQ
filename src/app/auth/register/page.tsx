@@ -78,11 +78,11 @@ export default function RegisterPage() {
               <input
                 type="password"
                 required
-                minLength={6}
+                minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                placeholder="6 أحرف على الأقل"
+                placeholder="8 أحرف على الأقل مع أرقام"
               />
             </div>
             {error && (

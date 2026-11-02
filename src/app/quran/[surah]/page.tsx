@@ -1,12 +1,15 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SurahReader from "@/components/quran/SurahReader";
-import { getSurah, SURAH_NAMES_AR } from "@/lib/quran";
+import { getSurah, SURAH_NAMES_AR, LOCAL_SURAHS } from "@/lib/quran";
 
 interface PageProps {
   params: Promise<{ surah: string }>;
+}
+
+export function generateStaticParams() {
+  return LOCAL_SURAHS.map((s) => ({ surah: String(s.number) }));
 }
 
 export async function generateMetadata({ params }: PageProps) {
@@ -24,18 +27,12 @@ export default async function SurahPage({ params }: PageProps) {
   const surahNumber = parseInt(surah, 10);
 
   if (isNaN(surahNumber) || surahNumber < 1 || surahNumber > 114) {
-    notFound();
-  }
-
-  const data = await getSurah(surahNumber);
-
-  if (!data) {
     return (
       <>
         <Header />
         <main className="flex-1 mx-auto max-w-4xl px-4 py-16 text-center">
-          <p className="text-muted-foreground">تعذر تحميل السورة. يرجى المحاولة لاحقاً.</p>
-          <Link href="/quran" className="btn-primary mt-6 inline-block">
+          <p className="text-muted-foreground mb-4">رقم السورة غير صالح.</p>
+          <Link href="/quran" className="btn-primary inline-block">
             العودة إلى المصحف
           </Link>
         </main>
@@ -44,7 +41,10 @@ export default async function SurahPage({ params }: PageProps) {
     );
   }
 
-  const nameAr = SURAH_NAMES_AR[data.number] || data.name;
+  const data = await getSurah(surahNumber);
+  const nameAr = SURAH_NAMES_AR[surahNumber] || data?.name || `سورة ${surahNumber}`;
+  const revelationType = data?.revelationType || "Meccan";
+  const ayahs = data?.ayahs || [];
   const prev = surahNumber > 1 ? surahNumber - 1 : null;
   const next = surahNumber < 114 ? surahNumber + 1 : null;
 
@@ -53,10 +53,10 @@ export default async function SurahPage({ params }: PageProps) {
       <Header />
       <main className="flex-1">
         <SurahReader
-          surahNumber={data.number}
+          surahNumber={surahNumber}
           surahName={nameAr}
-          revelationType={data.revelationType}
-          ayahs={data.ayahs}
+          revelationType={revelationType}
+          ayahs={ayahs}
           prevSurah={prev}
           nextSurah={next}
         />

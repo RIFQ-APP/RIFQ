@@ -334,3 +334,32 @@ export function IconBookmark(p: IconProps) {
     </svg>
   );
 }
+
+
+export function IconShare2(p: IconProps) {
+  return (
+    <svg {...base(p)}>
+      <circle cx="18" cy="5" r="3" />
+      <circle cx="6" cy="12" r="3" />
+      <circle cx="18" cy="19" r="3" />
+      <path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4" />
+    </svg>
+  );
+}
+
+export function IconShield(p: IconProps) {
+  return (
+    <svg {...base(p)}>
+      <path d="M12 3 4 7v5c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V7l-8-4z" />
+    </svg>
+  );
+}
+
+export function IconLock(p: IconProps) {
+  return (
+    <svg {...base(p)}>
+      <rect x="5" y="11" width="14" height="10" rx="2" />
+      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+    </svg>
+  );
+}

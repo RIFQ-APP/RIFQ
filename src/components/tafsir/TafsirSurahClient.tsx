@@ -37,6 +37,27 @@ export default function TafsirSurahClient({ surahNumber, surahName, ayahs }: Pro
   const [loading, setLoading] = useState(false);
   const [single, setSingle] = useState<TafsirResult | null>(null);
   const [multi, setMulti] = useState<TafsirResult[] | null>(null);
+  const [ayahList, setAyahList] = useState<Ayah[]>(ayahs);
+
+  useEffect(() => {
+    setAyahList(ayahs);
+    if (ayahList.length > 0) return;
+    let cancelled = false;
+    fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (cancelled) return;
+        const list = (d?.data?.ayahs || []).map((a: { numberInSurah: number; text: string }) => ({
+          numberInSurah: a.numberInSurah,
+          text: a.text,
+        }));
+        setAyahList(list);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [surahNumber, ayahs]);
 
   useEffect(() => {
     const ed = searchParams.get("edition");
@@ -151,12 +172,12 @@ export default function TafsirSurahClient({ surahNumber, surahName, ayahs }: Pro
 
       <div className="card p-4 mb-4">
         <label className="text-xs text-muted-foreground block mb-2">
-          رقم الآية ({ayahs.length})
+          رقم الآية ({ayahList.length})
         </label>
         <input
           type="range"
           min={1}
-          max={ayahs.length}
+          max={ayahList.length}
           value={selectedAyah}
           onChange={(e) => setSelectedAyah(Number(e.target.value))}
           className="w-full"

@@ -62,6 +62,36 @@ export default function SurahReader({
   const [tafsirList, setTafsirList] = useState<TafsirItem[]>([]);
   const [tafsirError, setTafsirError] = useState<string | null>(null);
   const [tafsirLoading, setTafsirLoading] = useState(false);
+  const [ayahList, setAyahList] = useState<Ayah[]>(ayahs);
+  const [loadingText, setLoadingText] = useState(ayahList.length === 0);
+
+  useEffect(() => {
+    setAyahList(ayahs);
+    if (ayahs.length > 0) {
+      setLoadingText(false);
+      return;
+    }
+    let cancelled = false;
+    setLoadingText(true);
+    fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (cancelled) return;
+        const list = (d?.data?.ayahs || []).map((a: Ayah) => ({
+          number: a.number,
+          text: a.text,
+          numberInSurah: a.numberInSurah,
+        }));
+        setAyahList(list);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setLoadingText(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [surahNumber, ayahs]);
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -178,7 +208,25 @@ export default function SurahReader({
   return (
     <>
       <div className="sticky top-16 z-40 border-b border-border bg-card/95 backdrop-blur">
-        <div className="mx-auto max-w-4xl px-4 py-3 flex items-center justify-between gap-4">
+        
+      {loadingText && (
+        <div className="mx-auto max-w-3xl px-4 py-8 text-center text-muted-foreground text-sm">
+          جاري تحميل الآيات...
+        </div>
+      )}
+      {!loadingText && ayahList.length === 0 && (
+        <div className="mx-auto max-w-3xl px-4 py-8 text-center text-sm">
+          <p className="text-muted-foreground mb-3">تعذر جلب النص الآن. تحقق من الاتصال وأعد المحاولة.</p>
+          <button
+            type="button"
+            className="btn-primary text-sm"
+            onClick={() => window.location.reload()}
+          >
+            تحديث الصفحة
+          </button>
+        </div>
+      )}
+<div className="mx-auto max-w-4xl px-4 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
             <Link
               href="/quran"
@@ -190,7 +238,7 @@ export default function SurahReader({
             <div className="min-w-0">
               <h1 className="font-bold text-foreground truncate">{surahName}</h1>
               <p className="text-xs text-muted-foreground">
-                {ayahs.length} آية ·{" "}
+                {ayahList.length} آية ·{" "}
                 {revelationType === "Meccan" ? "مكية" : "مدنية"}
               </p>
             </div>
@@ -250,7 +298,7 @@ export default function SurahReader({
         )}
 
         <div className="space-y-2">
-          {ayahs.map((ayah) => {
+          {ayahList.map((ayah) => {
             const isActive = currentAyah === ayah.numberInSurah;
             return (
               <div
@@ -455,7 +503,7 @@ export default function SurahReader({
       {showPlayer && (
         <AudioPlayer
           surahNumber={surahNumber}
-          totalAyahs={ayahs.length}
+          totalAyahs={ayahList.length}
           currentAyah={currentAyah}
           onAyahChange={handleAyahChange}
           reciter={reciter}

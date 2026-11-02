@@ -2,9 +2,8 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { IconHome } from "@/components/icons";
 
-export default function GlobalError({
+export default function Error({
   error,
   reset,
 }: {
@@ -17,11 +16,11 @@ export default function GlobalError({
 
   return (
     <div className="min-h-[50vh] flex flex-col items-center justify-center px-4 text-center">
-      <h1 className="text-xl font-bold mb-2">حدث خطأ غير متوقع</h1>
-      <p className="text-sm text-muted-foreground mb-6">
-        جرّب إعادة المحاولة أو العودة للرئيسية.
+      <h1 className="text-xl font-bold mb-2">تعذر عرض الصفحة مؤقتاً</h1>
+      <p className="text-sm text-muted-foreground mb-6 max-w-md">
+        قد يكون السبب انقطاعاً قصيراً في الشبكة. أعد المحاولة أو افتح المصحف من القائمة.
       </p>
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3 justify-center">
         <button
           type="button"
           onClick={reset}
@@ -29,8 +28,13 @@ export default function GlobalError({
         >
           إعادة المحاولة
         </button>
-        <Link href="/" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-border text-sm">
-          <IconHome size={16} />
+        <Link href="/quran" className="px-4 py-2 rounded-xl border border-border text-sm">
+          المصحف
+        </Link>
+        <Link href="/tafsir" className="px-4 py-2 rounded-xl border border-border text-sm">
+          التفسير
+        </Link>
+        <Link href="/" className="px-4 py-2 rounded-xl border border-border text-sm">
           الرئيسية
         </Link>
       </div>
